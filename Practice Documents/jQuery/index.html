@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>jQuery Tutorial</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
+        <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+    </head>
+    <body>
+        <h1>jQuery Tutorial</h1>
+        <p>By Edureka</p>
+        <p>Start Typing...</p>
+        <input id="press" type="text" size="10">
+        <script>
+            $(document).ready(function(){
+                $("button").click(function(){
+                    alert("Value: "+$("#sometext").val());
+                });
+            });
+
+        </script>
+        <input type="text" id="sometext" value="">
+        <button>Sumbit</button>
+        <div class="puppies">
+            <img src="puppies/goldie.png">
+            <img src="puppies/husky.png">
+            <img src="puppies/boxer.png">
+        </div>
+        <input id="press" type="text" size="10">
+        <script>
+            $(document).ready(function(){
+                $("input").on("keypress",function(){
+                    $("input").on("keypress",function(){
+                        $("p:last").hide();
+                    });
+                });
+            })
+        </script>
+        <ul>
+            <li>Golden Retriver<a href="google.com">Google</a></li>
+            <li>Syberian Husky</li>
+            <li>Boxer</li>
+        </ul>
+        <script>
+            let design={
+                color:"blue",
+                background:"green",
+                border:"3px solid black"
+            };
+        </script>
+
+        <div class="puppers">
+            <img src="puppies/goldie.png">
+            <img src="puppies/husky.png">
+            <img src="puppies/boxer.png">
+        </div>
+        <script>
+            $(document).ready(function(){
+                $("button").click(function(){
+                    $("img").addClass("styleclass");
+                });
+                $("img").click(function(){
+                    $(this).hide();
+                });
+            });
+        </script>
+        <style>
+            .styleclass{
+                border: 5px solid green
+            }
+        </style>
+        <button>Try addClass()</button>
+        <button class="button" id="hide">Hide</button>
+        <button class="button" id="show">Show</button>
+
+        <div class="pups">
+            <img src="puppies/goldie.png">
+        </div>
+        <script>
+            $(document).ready(function(){
+                $("#hide").click(function(){
+                    $("img").hide();
+                });
+                $("#show").click(function(){
+                    $("img").show();
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function(){
+                $("button").click(function(){
+                    $("#one").fadeOut("slow");
+                    $("#two").fadeOut("fast");
+                    $("#three").fadeOut("slow");
+                });
+            });
+        </script>
+        <button id="fadeIn">Namaste!</button>
+        <script>
+            $(document).ready(function(){
+                $("#fadeIn").click(function(){
+                    $("#one").fadeIn();
+                    $("#two").fadeIn("slow");
+                    $("#three").fadeIn(3000);
+                });
+            });
+        </script>
+        <div class="fade">
+            <div id="one" style="width:2200; height:60px; display:none; background-color:orange;"></div><br>
+            <div id="two" style="width:2200; height:60px; display:none; background-color:green;"></div><br>
+            <div id="three" style="width:2200; height:60px; display:none; background-color:white;"></div><br>
+        </div>
+
+        <button id="slide">Slide</button>
+        <div id="div1" style="width:90px;height:60px;display:none;background-color:pink;"></div>
+        <script>
+            $("#slide").on("click",function(){
+                $("#div1").slideDown("slow");
+            });
+        </script>
+    
+        <style>
+            #drag{
+                width:150px;
+                height:60px;
+                background-color:blueviolet
+            }
+        </style>
+
+            <script>
+                $(function(){
+                    $("#drag").draggable();
+                });
+            </script>
+        <div id="drag">
+            <p>Drag Me Around</p>
+        </div>
+
+        <img id="img1" src="puppies/goldie.png">
+        <style>
+            #drop{
+                width:400px;
+                height:400px;
+                float:right;
+                background-color:aquamarine;
+            }
+        </style>
+        <script>
+            $(function(){
+                $("#img1").draggable();
+                $("#drop").droppable();
+            });
+        </script>
+
+        <div id="drop">
+            <p>My home</p>
+        </div>
+
+    <input id="date" type="text" size="10">
+    <script>
+        $("#date").datepicker();
+    </script>
+
+    </body>
+</html>
