@@ -13,9 +13,9 @@ Grady Hillhouse (March 2015)
 #define ECHO_TO_SERIAL 1 //Sends datalogging to serial if 1, nothing if 0
 #define LOG_INTERVAL 360000 //milliseconds between entries (6 minutes = 360000)
 
-const int soilTempPin = A0;
+const int soilZone1Pin = A1;
 const int soilMoisturePin = A1;
-const int sunlightPin = A2;
+const int sunlightPin = A0;
 const int dhtPin = 2;
 const int chipSelect = 10;
 const int LEDPinGreen = 6;
@@ -186,8 +186,6 @@ void loop() {
 #endif //ECHO_TO_SERIAL
   
   //Collect Variables
-  soilTemp = (75.006 * analogRead(soilTempPin)*(3.3 / 1024)) - 42;
-  delay(20);
   
   soilMoistureRaw = analogRead(soilMoisturePin)*(3.3/1024);
   delay(20);
