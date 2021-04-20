@@ -133,9 +133,6 @@ void loop()
 #endif //ECHO_TO_SERIAL
 
   //Collect Variables
-  soilTemp = (75.006 * analogRead(soilTempPin) * (3.3 / 1024)) - 42;
-  delay(20);
-
   soilMoistureRaw = analogRead(soilMoisturePin) * (3.3 / 1024);
   delay(20);
 
