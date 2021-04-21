@@ -9,6 +9,7 @@
 //Pin assignments
 const int soilMoisturePin = A1;
 const int dhtPin = 2;
+const int sunlightPin = A0;
 
 DHT dht(dhtPin, DHTTYPE);
 RTC_DS1307 rtc;
@@ -18,6 +19,7 @@ float soilMoistureRaw = 0; //Raw analog input of soil moisture sensor (volts)
 float soilMoisture = 0;    //Scaled value of volumetric water content in soil (percent)
 float humidity = 0;        //Relative humidity (%)
 float airTemp = 0;         //Air temp (degrees F)
+float sunlight = 0; 	   //Sunlight illumination (lux)
 DateTime now;
 
 /*
@@ -33,8 +35,7 @@ void error(char *str)
 {
   Serial.print("error: ");
   Serial.println(str);
-  while (1)
-    ;
+  while(1);
 }
 
 void setup()
@@ -65,7 +66,7 @@ void setup()
   }
 
 #if ECHO_TO_SERIAL
-  Serial.println("Unix Time (s),Date,Air Temp (F),Soil Moisture Content (%),Relative Humidity (%)");
+  Serial.println("Air Temp (F),Soil Moisture Content (%),Relative Humidity (%),Sunlight Illumination (lux)");
 #endif ECHO_TO_SERIAL // attempt to write out the header to the console
   now = rtc.now();
 }
@@ -77,24 +78,6 @@ void loop()
   delay((LOG_INTERVAL - 1) - (millis() % LOG_INTERVAL));
 
   now = rtc.now();
-
-  //Print time to serial monitor
-#if ECHO_TO_SERIAL
-  Serial.print(now.unixtime()); // seconds since 2000
-  Serial.print(",");
-  Serial.print(now.year(), DEC);
-  Serial.print("/");
-  Serial.print(now.month(), DEC);
-  Serial.print("/");
-  Serial.print(now.day(), DEC);
-  Serial.print(" ");
-  Serial.print(now.hour(), DEC);
-  Serial.print(":");
-  Serial.print(now.minute(), DEC);
-  Serial.print(":");
-  Serial.print(now.second(), DEC);
-  Serial.print(",");
-#endif //ECHO_TO_SERIAL
 
   //Collect raw moisture from voltage
   soilMoistureRaw = analogRead(soilMoisturePin) * (3.8874 / 1024);
@@ -121,6 +104,9 @@ void loop()
   {
     soilMoisture = (62.5 * soilMoistureRaw) - 87.5;
   }
+  
+  if(soilMoisture < 0) {soilMositure = 0;}
+  else if(soilMoisture > 100) {soilMoisture = 100;}
 
   //Collect humidity
   humidity = dht.readHumidity();
@@ -128,6 +114,10 @@ void loop()
 
   //Collect temperature (true = Fahrenheit)
   airTemp = dht.readTemperature(true);
+  delay(20);
+  
+  //Collect sunlight with a rough conversion
+  sunlight = pow(((((150 * 3.3)/(analogRead(sunlightPin)*(3.3/1024))) - 150) / 70000),-1.25);
   delay(20);
 
   //Print measurements to serial monitor
@@ -137,6 +127,8 @@ void loop()
   Serial.print(soilMoisture);
   Serial.print(",");
   Serial.print(humidity);
+  Serial.print(",");
+  Serial.print(sunlight);
   Serial.print(",");
 #endif
 
