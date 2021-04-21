@@ -3,36 +3,23 @@
 #include <Wire.h>
 #include "RTClib.h"
 #define DHTTYPE DHT11
-<<<<<<< HEAD
 #define ECHO_TO_SERIAL 1   //Sends datalogging to serial if 1, nothing if 0
-=======
-#define ECHO_TO_SERIAL 1 //Sends datalogging to serial if 1, nothing if 0
->>>>>>> 34ac446b0f46121474b9b3f1eba79a3fee656027
 #define LOG_INTERVAL 10000 //milliseconds between entries (6 minutes = 360000)
 
 //Pin assignments
 const int soilMoisturePin = A1;
 const int dhtPin = 2;
-<<<<<<< HEAD
 const int sunlightPin = A0;
-=======
->>>>>>> 34ac446b0f46121474b9b3f1eba79a3fee656027
 
 DHT dht(dhtPin, DHTTYPE);
 RTC_DS1307 rtc;
 
 //Initialize variables
 float soilMoistureRaw = 0; //Raw analog input of soil moisture sensor (volts)
-<<<<<<< HEAD
 float soilMoisture = 0;    //Scaled value of volumetric water content in soil (percent)
 float humidity = 0;        //Relative humidity (%)
 float airTemp = 0;         //Air temp (degrees F)
 float sunlight = 0; 	   //Sunlight illumination (lux)
-=======
-float soilMoisture = 0; //Scaled value of volumetric water content in soil (percent)
-float humidity = 0; //Relative humidity (%)
-float airTemp = 0; //Air temp (degrees F)
->>>>>>> 34ac446b0f46121474b9b3f1eba79a3fee656027
 DateTime now;
 
 /*
@@ -57,11 +44,6 @@ void setup() {
   Serial.begin(9600); //Just for testing
   Serial.println("Initializing...");
   analogReference(EXTERNAL); //Sets the max voltage from analog inputs to whatever is connected to the Aref pin (should be 3.3v)
-<<<<<<< HEAD
-
-=======
-  
->>>>>>> 34ac446b0f46121474b9b3f1eba79a3fee656027
   //Establish connection with DHT sensor
   dht.begin();
   
@@ -78,7 +60,6 @@ void setup() {
     // following line sets the RTC to the date & time this sketch was compiled
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   }
-<<<<<<< HEAD
 
 #if ECHO_TO_SERIAL
   Serial.println("Air Temp (F),Soil Moisture Content (%),Relative Humidity (%),Sunlight Illumination (lux)");
@@ -96,46 +77,9 @@ void loop()
 
   //Collect raw moisture from voltage
   soilMoistureRaw = analogRead(soilMoisturePin) * (3.8874 / 1024);
-=======
-  
-#if ECHO_TO_SERIAL
-  Serial.println("Unix Time (s),Date,Air Temp (F),Soil Moisture Content (%),Relative Humidity (%)");
-#endif ECHO_TO_SERIAL// attempt to write out the header to the console
-  now = rtc.now();
-}
-
-void loop() {
-    
-  //Wait for reading interval
-  delay((LOG_INTERVAL -1) - (millis() % LOG_INTERVAL));
-  
-  now = rtc.now();
-  
-  //Print time to serial monitor
- #if ECHO_TO_SERIAL
-  Serial.print(now.unixtime()); // seconds since 2000
-  Serial.print(",");
-  Serial.print(now.year(), DEC);
-  Serial.print("/");
-  Serial.print(now.month(), DEC);
-  Serial.print("/");
-  Serial.print(now.day(), DEC);
-  Serial.print(" ");
-  Serial.print(now.hour(), DEC);
-  Serial.print(":");
-  Serial.print(now.minute(), DEC);
-  Serial.print(":");
-  Serial.print(now.second(), DEC);
-  Serial.print(",");
-#endif //ECHO_TO_SERIAL
-  
-  //Collect raw moisture from voltage
-  soilMoistureRaw = analogRead(soilMoisturePin)*(3.3/1024);
->>>>>>> 34ac446b0f46121474b9b3f1eba79a3fee656027
   delay(20);
   
   //Volumetric Water Content is a piecewise function of the voltage from the sensor
-<<<<<<< HEAD
   if (soilMoistureRaw <= 1.1)
   {
     soilMoisture = (10 * soilMoistureRaw) - 1;
@@ -150,18 +94,6 @@ void loop() {
   }
   else if (soilMoistureRaw > 1.82 && soilMoistureRaw < 2.2)
   {
-=======
-  if (soilMoistureRaw < 1.1) {
-    soilMoisture = (10 * soilMoistureRaw) - 1;
-  }
-  else if (soilMoistureRaw < 1.3) {
-    soilMoisture = (25 * soilMoistureRaw) - 17.5;
-  }
-  else if (soilMoistureRaw < 1.82) {
-    soilMoisture = (48.08 * soilMoistureRaw) - 47.5;
-  }
-  else if (soilMoistureRaw < 2.2) {
->>>>>>> 34ac446b0f46121474b9b3f1eba79a3fee656027
     soilMoisture = (26.32 * soilMoistureRaw) - 7.89;
   }
   else {
@@ -174,7 +106,6 @@ void loop() {
   //Collect humidity
   humidity = dht.readHumidity();
   delay(20);
-<<<<<<< HEAD
 
   //Collect temperature (true = Fahrenheit)
   airTemp = dht.readTemperature(true);
@@ -183,12 +114,6 @@ void loop() {
   //Collect sunlight with a rough conversion
   sunlight = pow(((((150 * 3.3)/(analogRead(sunlightPin)*(3.3/1024))) - 150) / 70000),-1.25);
   delay(20);
-=======
-  
-  //Collect temperature (true = Fahrenheit)
-  airTemp = dht.readTemperature(true);
-  delay(20);
->>>>>>> 34ac446b0f46121474b9b3f1eba79a3fee656027
 
   //Print measurements to serial monitor
 #if ECHO_TO_SERIAL
