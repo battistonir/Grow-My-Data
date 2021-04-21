@@ -1,6 +1,7 @@
 #include "DHT.h"
 #include <SPI.h>
 #include <Wire.h>
+#include <WiFiNINA.h>
 #include "RTClib.h"
 #define DHTTYPE DHT11
 #define ECHO_TO_SERIAL 1   //Sends datalogging to serial if 1, nothing if 0
@@ -21,6 +22,14 @@ float humidity = 0;        //Relative humidity (%)
 float airTemp = 0;         //Air temp (degrees F)
 float sunlight = 0; 	   //Sunlight illumination (lux)
 DateTime now;
+
+//WiFi login credentials
+char ssid[] = "test"; 
+char pass[] = "";
+char server[] = "71142021.000webhostapp.com";
+String postData;
+int status = WL_IDLE_STATUS;
+WiFiClient client;
 
 /*
 Soil Moisture Reference
@@ -43,6 +52,12 @@ void setup() {
   //Initialize serial connection
   Serial.begin(9600); //Just for testing
   Serial.println("Initializing...");
+  while (status != WL_CONNECTED) {
+    Serial.print("Attempting to connect to Network named: ");
+    Serial.println(ssid);
+    status = WiFi.begin(ssid, pass);
+    delay(10000);
+  }
   analogReference(EXTERNAL); //Sets the max voltage from analog inputs to whatever is connected to the Aref pin (should be 3.3v)
   //Establish connection with DHT sensor
   dht.begin();
@@ -100,8 +115,14 @@ void loop()
     soilMoisture = (62.5 * soilMoistureRaw) - 87.5;
   }
   
-  if(soilMoisture < 0) {soilMositure = 0;}
-  else if(soilMoisture > 100) {soilMoisture = 100;}
+  if (soilMoisture < 0)
+  {
+	soilMoisture = 0;
+  }
+  else if (soilMoisture > 100)
+  {
+	soilMoisture = 100;
+  }
 
   //Collect humidity
   humidity = dht.readHumidity();
@@ -126,6 +147,20 @@ void loop()
   Serial.print(sunlight);
   Serial.print(",");
 #endif
+  if (client.connect(server, 80)) {
+	postData = "plantId=30&temperature="+airTemp+"&moisture="+soilMoisture+"&humidity="+humidity+"&sunlight="+sunlight;
+    client.println("POST /setPlantTraits.php HTTP/1.1");
+    client.println("Host: 71142021.000webhostapp.com");
+    client.println("Content-Type: application/x-www-form-urlencoded");
+    client.print("Content-Length: ");
+    client.println(postData.length());
+    client.println();
+    client.print(postData);
+	delay(1000)
+  }
+  if (client.connected()) {
+    client.stop();
+  }
   
 #if ECHO_TO_SERIAL
   Serial.println();
