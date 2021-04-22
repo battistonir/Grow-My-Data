@@ -148,7 +148,14 @@ void loop()
   Serial.print(",");
 #endif
   if (client.connect(server, 80)) {
-	postData = "plantId=30&temperature="+airTemp+"&moisture="+soilMoisture+"&humidity="+humidity+"&sunlight="+sunlight;
+	postData = "plantId=30&temperature=";
+	postData.concat(airTemp);
+	postData.concat("&moisture=");
+	postData.concat(soilMoisture);
+	postData.concat("&humidity=");
+	postData.concat(humidity);
+	postData.concat("&sunlight=");
+	postData.concat(sunlight);
     client.println("POST /setPlantTraits.php HTTP/1.1");
     client.println("Host: 71142021.000webhostapp.com");
     client.println("Content-Type: application/x-www-form-urlencoded");
@@ -156,7 +163,7 @@ void loop()
     client.println(postData.length());
     client.println();
     client.print(postData);
-	delay(1000)
+	delay(1000);
   }
   if (client.connected()) {
     client.stop();
