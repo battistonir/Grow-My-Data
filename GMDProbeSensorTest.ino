@@ -17,7 +17,8 @@ RTC_DS1307 rtc;
 
 //Initialize variables
 float soilMoistureRaw = 0; //Raw analog input of soil moisture sensor (volts)
-float soilMoisture[5];    //Scaled value of volumetric water content in soil (percent)
+float soilMoisture[5];     //Scaled value of volumetric water content in soil (percent)
+float soilCalibration[5] = {3.887, 3.642, 3.642, 3.807};
 float humidity = 0;        //Relative humidity (%)
 float airTemp = 0;         //Air temp (degrees F)
 float sunlight = 0; 	   //Sunlight illumination (lux)
@@ -93,7 +94,7 @@ void loop()
   //Volumetric Water Content is a piecewise function of the voltage from the sensor
   for (int i = 0; i < 5; i++)
   {
-	soilMoistureRaw = analogRead(soilMoisturePin[i]) * (3.8874 / 1024);
+	soilMoistureRaw = analogRead(soilMoisturePin[i]) * (soilCalibration[i] / 1024);
 	delay(20);
   
 	//Volumetric Water Content is a piecewise function of the voltage from the sensor
@@ -125,7 +126,7 @@ void loop()
 	{
 		soilMoisture[i] = 100;
 	}
-	delay(20);
+	delay(1000);
   }
 
   //Collect humidity
@@ -178,7 +179,7 @@ void loop()
   if (client.connected()) {
     client.stop();
   }
-  delay(100);
+  delay(1000);
   if (client.connect(server, 80)) {
 	postData = "plantId=31&temperature=";
 	postData.concat(airTemp);
@@ -200,7 +201,7 @@ void loop()
   if (client.connected()) {
     client.stop();
   }
-  delay(100);
+  delay(1000);
   if (client.connect(server, 80)) {
 	postData = "plantId=33&temperature=";
 	postData.concat(airTemp);
@@ -222,7 +223,7 @@ void loop()
   if (client.connected()) {
     client.stop();
   }
-  delay(100);
+  delay(1000);
   if (client.connect(server, 80)) {
 	postData = "plantId=34&temperature=";
 	postData.concat(airTemp);
