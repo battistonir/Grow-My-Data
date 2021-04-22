@@ -97,7 +97,7 @@ void loop()
   //Volumetric Water Content is a piecewise function of the voltage from the sensor
   for (int i = 0; i < 5; i++)
   {
-	soilMoistureRaw = analogRead(soilMoisturePin) * (3.8874 / 1024);
+	soilMoistureRaw = analogRead(soilMoisturePin[i]) * (3.8874 / 1024);
 	delay(20);
   
 	//Volumetric Water Content is a piecewise function of the voltage from the sensor
