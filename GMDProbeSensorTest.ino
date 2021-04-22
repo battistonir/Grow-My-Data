@@ -18,7 +18,7 @@ RTC_DS1307 rtc;
 //Initialize variables
 float soilMoistureRaw = 0; //Raw analog input of soil moisture sensor (volts)
 float soilMoisture[5];     //Scaled value of volumetric water content in soil (percent)
-float soilCalibration[5] = {3.887, 3.642, 3.3, 3.3};
+float soilCalibration[5] = {3.887, 3.642, 3.642, 3.807};
 float humidity = 0;        //Relative humidity (%)
 float airTemp = 0;         //Air temp (degrees F)
 float sunlight = 0; 	   //Sunlight illumination (lux)
