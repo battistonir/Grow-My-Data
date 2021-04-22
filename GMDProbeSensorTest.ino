@@ -90,10 +90,6 @@ void loop()
 
   now = rtc.now();
 
-  //Collect raw moisture from voltage
-  soilMoistureRaw = analogRead(soilMoisturePin) * (3.8874 / 1024);
-  delay(20);
-  
   //Volumetric Water Content is a piecewise function of the voltage from the sensor
   for (int i = 0; i < 5; i++)
   {
@@ -103,31 +99,31 @@ void loop()
 	//Volumetric Water Content is a piecewise function of the voltage from the sensor
 	if (soilMoistureRaw <= 1.1)
 	{
-		soilMoisture = (10 * soilMoistureRaw) - 1;
+		soilMoisture[i] = (10 * soilMoistureRaw) - 1;
 	}
 	else if (soilMoistureRaw > 1.1 && soilMoistureRaw <= 1.3)
 	{
-		soilMoisture = (25 * soilMoistureRaw) - 17.5;
+		soilMoisture[i] = (25 * soilMoistureRaw) - 17.5;
 	}
 	else if (soilMoistureRaw > 1.3 && soilMoistureRaw <= 1.82)
 	{
-		soilMoisture = (48.08 * soilMoistureRaw) - 47.5;
+		soilMoisture[i] = (48.08 * soilMoistureRaw) - 47.5;
 	}
 	else if (soilMoistureRaw > 1.82 && soilMoistureRaw < 2.2)
 	{
-    soilMoisture = (26.32 * soilMoistureRaw) - 7.89;
+    soilMoisture[i] = (26.32 * soilMoistureRaw) - 7.89;
 	}
 	else {
-		soilMoisture = (62.5 * soilMoistureRaw) - 87.5;
+		soilMoisture[i] = (62.5 * soilMoistureRaw) - 87.5;
 	}
 
-	if (soilMoisture < 0)
+	if (soilMoisture[i] < 0)
 	{
-		soilMoisture = 0;
+		soilMoisture[i] = 0;
 	}
-	else if (soilMoisture > 100)
+	else if (soilMoisture[i] > 100)
 	{
-		soilMoisture = 100;
+		soilMoisture[i] = 100;
 	}
 	delay(20);
   }
