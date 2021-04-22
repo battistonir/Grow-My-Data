@@ -13,16 +13,14 @@ const int dhtPin = 2;
 const int sunlightPin = A0;
 
 DHT dht(dhtPin, DHTTYPE);
-RTC_DS1307 rtc;
 
 //Initialize variables
 float soilMoistureRaw = 0; //Raw analog input of soil moisture sensor (volts)
 float soilMoisture[5];     //Scaled value of volumetric water content in soil (percent)
-float soilCalibration[5] = {3.887, 3.642, 3.642, 3.807};
+int plantIDs[5] = {30, 31, 33, 34};
 float humidity = 0;        //Relative humidity (%)
 float airTemp = 0;         //Air temp (degrees F)
 float sunlight = 0; 	   //Sunlight illumination (lux)
-DateTime now;
 
 //WiFi login credentials
 char ssid[] = "test"; 
@@ -31,15 +29,6 @@ char server[] = "71142021.000webhostapp.com";
 String postData;
 int status = WL_IDLE_STATUS;
 WiFiClient client;
-
-/*
-Soil Moisture Reference
-Air = 0%
-Really dry soil = 10%
-Probably as low as you'd want = 20%
-Well watered = 50%
-Cup of water = 100%
-*/
 
 void error(char *str)
 {
@@ -59,28 +48,17 @@ void setup() {
     status = WiFi.begin(ssid, pass);
     delay(10000);
   }
+  Serial.println("Success!");
   analogReference(EXTERNAL); //Sets the max voltage from analog inputs to whatever is connected to the Aref pin (should be 3.3v)
   //Establish connection with DHT sensor
   dht.begin();
   
   //Establish connection with real time clock
   Wire.begin();
-  if (!rtc.begin()) {
-#if ECHO_TO_SERIAL
-    Serial.println("RTC failed");
-#endif  //ECHO_TO_SERIAL
-  }
-  
-  //Set the time and date on the real time clock if necessary
-  if (! rtc.isrunning()) {
-    // following line sets the RTC to the date & time this sketch was compiled
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-  }
 
 #if ECHO_TO_SERIAL
   Serial.println("Air Temp (F),Soil Moisture Content (%),Relative Humidity (%),Sunlight Illumination (lux)");
 #endif ECHO_TO_SERIAL // attempt to write out the header to the console
-  now = rtc.now();
 }
 
 void loop()
@@ -88,8 +66,6 @@ void loop()
 
   //Wait for reading interval
   delay((LOG_INTERVAL - 1) - (millis() % LOG_INTERVAL));
-
-  now = rtc.now();
 
   //Volumetric Water Content is a piecewise function of the voltage from the sensor
   for (int i = 0; i < 5; i++)
@@ -158,92 +134,32 @@ void loop()
   Serial.print(sunlight);
   Serial.print(",");
 #endif
-  if (client.connect(server, 80)) {
-	postData = "plantId=30&temperature=";
-	postData.concat(airTemp);
-	postData.concat("&moisture=");
-	postData.concat(soilMoisture[0]);
-	postData.concat("&humidity=");
-	postData.concat(humidity);
-	postData.concat("&sunlight=");
-	postData.concat(sunlight);
-    client.println("POST /setPlantTraits.php HTTP/1.1");
-    client.println("Host: 71142021.000webhostapp.com");
-    client.println("Content-Type: application/x-www-form-urlencoded");
-    client.print("Content-Length: ");
-    client.println(postData.length());
-    client.println();
-    client.print(postData);
+  for (int i = 0; i < 5; i++)
+  {
+	if (client.connect(server, 80)) {
+		postData = "plantId=";
+		postData.concat(plantIDs[i]);
+		postData.concat("&temperature=");
+		postData.concat(airTemp);
+		postData.concat("&moisture=");
+		postData.concat(soilMoisture[i]);
+		postData.concat("&humidity=");
+		postData.concat(humidity);
+		postData.concat("&sunlight=");
+		postData.concat(sunlight);
+		client.println("POST /setPlantTraits.php HTTP/1.1");
+		client.println("Host: 71142021.000webhostapp.com");
+		client.println("Content-Type: application/x-www-form-urlencoded");
+		client.print("Content-Length: ");
+		client.println(postData.length());
+		client.println();
+		client.print(postData);
+		delay(1000);
+	}
+	if (client.connected()) {
+		client.stop();
+	}
 	delay(1000);
-  }
-  if (client.connected()) {
-    client.stop();
-  }
-  delay(1000);
-  if (client.connect(server, 80)) {
-	postData = "plantId=31&temperature=";
-	postData.concat(airTemp);
-	postData.concat("&moisture=");
-	postData.concat(soilMoisture[1]);
-	postData.concat("&humidity=");
-	postData.concat(humidity);
-	postData.concat("&sunlight=");
-	postData.concat(sunlight);
-    client.println("POST /setPlantTraits.php HTTP/1.1");
-    client.println("Host: 71142021.000webhostapp.com");
-    client.println("Content-Type: application/x-www-form-urlencoded");
-    client.print("Content-Length: ");
-    client.println(postData.length());
-    client.println();
-    client.print(postData);
-	delay(1000);
-  }
-  if (client.connected()) {
-    client.stop();
-  }
-  delay(1000);
-  if (client.connect(server, 80)) {
-	postData = "plantId=33&temperature=";
-	postData.concat(airTemp);
-	postData.concat("&moisture=");
-	postData.concat(soilMoisture[2]);
-	postData.concat("&humidity=");
-	postData.concat(humidity);
-	postData.concat("&sunlight=");
-	postData.concat(sunlight);
-    client.println("POST /setPlantTraits.php HTTP/1.1");
-    client.println("Host: 71142021.000webhostapp.com");
-    client.println("Content-Type: application/x-www-form-urlencoded");
-    client.print("Content-Length: ");
-    client.println(postData.length());
-    client.println();
-    client.print(postData);
-	delay(1000);
-  }
-  if (client.connected()) {
-    client.stop();
-  }
-  delay(1000);
-  if (client.connect(server, 80)) {
-	postData = "plantId=34&temperature=";
-	postData.concat(airTemp);
-	postData.concat("&moisture=");
-	postData.concat(soilMoisture[3]);
-	postData.concat("&humidity=");
-	postData.concat(humidity);
-	postData.concat("&sunlight=");
-	postData.concat(sunlight);
-    client.println("POST /setPlantTraits.php HTTP/1.1");
-    client.println("Host: 71142021.000webhostapp.com");
-    client.println("Content-Type: application/x-www-form-urlencoded");
-    client.print("Content-Length: ");
-    client.println(postData.length());
-    client.println();
-    client.print(postData);
-	delay(1000);
-  }
-  if (client.connected()) {
-    client.stop();
   }
   
 #if ECHO_TO_SERIAL
