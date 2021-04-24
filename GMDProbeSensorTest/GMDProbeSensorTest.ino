@@ -17,15 +17,15 @@ DHT dht(dhtPin, DHTTYPE);
 //Initialize variables
 float soilMoistureRaw = 0; //Raw analog input of soil moisture sensor (volts)
 float soilMoisture[5];     //Scaled value of volumetric water content in soil (percent)
-float soilCalibration[5] = {3.887, 3.642, 3.642, 3.807}
+float soilCalibration[5] = {3.887, 3.642, 3.642, 3.807};
 int plantIDs[5] = {30, 31, 33, 34};
 float humidity = 0;        //Relative humidity (%)
 float airTemp = 0;         //Air temp (degrees F)
 float sunlight = 0; 	   //Sunlight illumination (lux)
 
 //WiFi login credentials
-char ssid[] = "test"; 
-char pass[] = "";
+char ssid[] = "Hacienda"; 
+char pass[] = "wifidecasa85";
 char server[] = "71142021.000webhostapp.com";
 String postData;
 int status = WL_IDLE_STATUS;
@@ -160,7 +160,7 @@ void loop()
 	if (client.connected()) {
 		client.stop();
 	}
-	delay(1000);
+	delay(5000);
   }
   
 #if ECHO_TO_SERIAL
