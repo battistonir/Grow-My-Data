@@ -24,8 +24,8 @@ float airTemp = 0;         //Air temp (degrees F)
 float sunlight = 0; 	   //Sunlight illumination (lux)
 
 //WiFi login credentials
-char ssid[] = "test"; 
-char pass[] = "";
+char ssid[] = "Hacienda"; 
+char pass[] = "wifidecasa85";
 char server[] = "71142021.000webhostapp.com";
 String postData;
 int status = WL_IDLE_STATUS;
