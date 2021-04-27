@@ -71,7 +71,9 @@ void loop()
 
   //Wait for reading interval
   delay((LOG_INTERVAL - 1) - (millis() % LOG_INTERVAL));
-
+ 
+  for (int i = 0; i < 5; i++)
+  {
   //Volumetric Water Content is a piecewise function of the voltage from the sensor
   soilMoistureRaw = analogRead(soilMoisturePin[i]) * (soilCalibration[i] / 1024);
   delay(20);
@@ -106,6 +108,7 @@ void loop()
     soilMoisture[i] = 100;
   }
   delay(1000);
+  }
 
   //Collect humidity
   humidity = dht.readHumidity();
