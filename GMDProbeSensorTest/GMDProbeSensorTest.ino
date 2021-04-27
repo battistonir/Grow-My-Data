@@ -146,11 +146,11 @@ void loop()
   Serial.println("Uploading to database...");
   postData = "plantId1=";
   postData.concat(plantIDs[0]);
-  postData.concat = "plantId2=";
+  postData.concat("plantId2=");
   postData.concat(plantIDs[1]);
-  postData.concat = "plantId3=";
+  postData.concat("plantId3=");
   postData.concat(plantIDs[2]);
-  postData.concat = "plantId4=";
+  postData.concat("plantId4=");
   postData.concat(plantIDs[3]);
   postData.concat("&temperature=");
   postData.concat(airTemp);
