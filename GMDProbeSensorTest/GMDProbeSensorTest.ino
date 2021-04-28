@@ -45,7 +45,7 @@ void error(char *str)
 void setup() {
   
   //Initialize serial connection
-  Serial.begin(9600); //Just for testing
+  Serial.begin(38400); //Just for testing
   Serial.println("Initializing...");
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to Network named: ");
@@ -173,7 +173,7 @@ void loop()
   client.println(postData.length());
   client.println();
   client.print(postData);
-  delay(4000);
+  delay(30000);
 }
 if (client.connected()) {
   Serial.println("Upload complete");
