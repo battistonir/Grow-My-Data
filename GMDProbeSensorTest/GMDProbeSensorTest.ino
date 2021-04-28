@@ -11,8 +11,7 @@
 //Pin assignments
 const int soilMoisturePin[5] = {A1, A2, A3, A4};
 const int dhtPin = 2;
-const int sunlightPin1 = A0;
-const int sunlightPin2 = A5;
+const int sunlightPin = A5;
 
 DHT dht(dhtPin, DHTTYPE);
 
@@ -119,11 +118,8 @@ void loop()
   delay(20);
   
   //Collect sunlight with a rough conversion
-  sunlight1 = pow(((((150 * 3.3)/(analogRead(sunlightPin1)*(3.3/1024))) - 150) / 70000),-1.25);
+  sunlight = pow(((((150 * 3.3)/(analogRead(sunlightPin1)*(3.3/1024))) - 150) / 70000),-1.25);
   delay(20);
-  sunlight2 = pow(((((150 * 3.3)/(analogRead(sunlightPin2)*(3.3/1024))) - 150) / 70000),-1.25);
-  delay(20);
-  sunlight = (sunlight1 + sunlight2)/2;
 
   //Print measurements to serial monitor
 #if ECHO_TO_SERIAL
