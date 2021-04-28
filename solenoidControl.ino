@@ -3,7 +3,7 @@
 
 CytronMD motor(PWM_DIR, 3, 4);  // PWM = Pin 3, DIR = Pin 4.
 
-LiquidCrystal lcd(8, 9);  
+LiquidCrystal lcd(8,9,4,5,6,7);  
 int x = analogRead (A0); 
 #define SensorPin1 D1
 #define SensorPin2 D11
