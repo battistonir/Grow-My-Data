@@ -118,7 +118,7 @@ void loop()
   delay(20);
   
   //Collect sunlight with a rough conversion
-  sunlight = pow(((((150 * 3.3)/(analogRead(sunlightPin1)*(3.3/1024))) - 150) / 70000),-1.25);
+  sunlight = pow(((((150 * 3.3)/(analogRead(sunlightPin)*(3.3/1024))) - 150) / 70000),-1.25);
   delay(20);
 
   //Print measurements to serial monitor
