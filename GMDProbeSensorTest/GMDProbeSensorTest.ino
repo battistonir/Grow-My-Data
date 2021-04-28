@@ -11,8 +11,7 @@
 //Pin assignments
 const int soilMoisturePin[5] = {A1, A2, A3, A4};
 const int dhtPin = 2;
-const int sunlightPin1 = A0;
-const int sunlightPin2 = A5;
+const int sunlightPin = A5;
 
 DHT dht(dhtPin, DHTTYPE);
 
@@ -23,8 +22,7 @@ float soilCalibration[5] = {3.887, 3.642, 3.642, 3.807};
 int plantIDs[5] = {30, 31, 33, 34};
 float humidity = 0;        //Relative humidity (%)
 float airTemp = 0;         //Air temp (degrees F)
-float sunlight1 = 0;
-float sunlight2 = 0;
+float sunlight = 0;
 float sunlight = 0; 	   //Sunlight illumination (lux)
 
 //WiFi login credentials
@@ -119,11 +117,8 @@ void loop()
   delay(20);
   
   //Collect sunlight with a rough conversion
-  sunlight1 = pow(((((150 * 3.3)/(analogRead(sunlightPin1)*(3.3/1024))) - 150) / 70000),-1.25);
+  sunlight = pow(((((150 * 3.3)/(analogRead(sunlightPin)*(3.3/1024))) - 150) / 70000),-1.25);
   delay(20);
-  sunlight2 = pow(((((150 * 3.3)/(analogRead(sunlightPin2)*(3.3/1024))) - 150) / 70000),-1.25);
-  delay(20);
-  sunlight = (sunlight1 + sunlight2)/2;
 
   //Print measurements to serial monitor
 #if ECHO_TO_SERIAL
@@ -173,7 +168,7 @@ void loop()
   client.println(postData.length());
   client.println();
   client.print(postData);
-  delay(30000);
+  delay(10000);
 }
 if (client.connected()) {
   Serial.println("Upload complete");
