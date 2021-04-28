@@ -1,14 +1,10 @@
-#include "LiquidCrystal.h"
-#include "CytronMotorDriver.h"
+#include <LiquidCrystal.h>
+#include <CytronMotorDriver.h>
 
 CytronMD motor(PWM_DIR, 3, 4);  // PWM = Pin 3, DIR = Pin 4.
 
-LiquidCrystal lcd(8,9,4,5,6,7);  
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);  
 int x = analogRead (A0); 
-#define SensorPin1 D1
-#define SensorPin2 D11
-#define SensorPin3 D12
-#define SensorPin4 D13
 
 int mode=0;
 int lcd_key     = 0;
@@ -48,23 +44,22 @@ int read_LCD_buttons()
 }
 
 void setup()
-{        
+{     
+ pinMode(D1,OUTPUT);
+ pinMode(D11,OUTPUT);
+ pinMode(D12,OUTPUT);
+ pinMode(D13,OUTPUT);   
  CytronMD motor(PWM_DIR, A0, A1); 
- lcd.begin(16, 2);              // start the library
+ lcd.begin(16, 2);           
  lcd.setCursor(0,0);
- lcd.print("Push the buttons"); // print a simple message
+ lcd.print("Push the buttons");
 }
 
-void loop() 
- lcd.setCursor(9,1);            // move cursor to second line "1" and 9 spaces over
- lcd.print(millis()/1000);      // display seconds elapsed since power-up
+void loop(){ 
+ lcd.setCursor(0,0);
+ lcd_key = read_LCD_buttons();
 
-
- lcd.setCursor(0,1);            // move to the begining of the second line
- lcd_key = read_LCD_buttons();  // read the buttons
-
- switch (lcd_key)               // depending on which button was pushed, we perform an action
- {
+ switch (lcd_key){
    case btnRIGHT:
      {
      lcd.print("RIGHT ");
@@ -75,10 +70,10 @@ void loop()
      }
      if(mode==1){
       lcd.print ("Mositure Sensors ON");
-      digitalWrite(SensorPin1, HIGH);
-      digitalWrite(SensorPin2, HIGH);
-      digitalWrite(SensorPin3, HIGH);
-      digitalWrite(SensorPin4, HIGH);
+      digitalWrite(D1, HIGH);
+      digitalWrite(D11, HIGH);
+      digitalWrite(D12, HIGH);
+      digitalWrite(D13, HIGH);
      }
      break;
      }
@@ -92,10 +87,10 @@ void loop()
      }
      if(mode==1){
       lcd.print ("Mositure Sensors OFF");
-      digitalWrite(SensorPin1, LOW);
-      digitalWrite(SensorPin2, LOW);
-      digitalWrite(SensorPin3, LOW);
-      digitalWrite(SensorPin4, LOW);
+      digitalWrite(D1, LOW);
+      digitalWrite(D11, LOW);
+      digitalWrite(D12, LOW);
+      digitalWrite(D13, LOW);
      }
      break;
      }
