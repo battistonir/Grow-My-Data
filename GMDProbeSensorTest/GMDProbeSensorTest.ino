@@ -14,6 +14,7 @@ const int dhtPin = 2;
 const int sunlightPin = A5;
 
 DHT dht(dhtPin, DHTTYPE);
+CytronMD motor(PWM_DIR, 3, 4);
 
 //Initialize variables
 float soilMoistureRaw = 0; //Raw analog input of soil moisture sensor (volts)
@@ -69,6 +70,8 @@ void loop()
 
   //Wait for reading interval
   delay((LOG_INTERVAL - 1) - (millis() % LOG_INTERVAL));
+  motor.setSpeed(255);  // Run forward at full speed.
+  delay(1000);
  
   for (int i = 0; i < 5; i++)
   {
